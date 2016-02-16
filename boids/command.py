@@ -19,9 +19,11 @@ def process():
 		position_limits =  json.loads(config.get('Boids', 'position_limits'))
 		velocity_limits =  json.loads(config.get('Boids', 'velocity_limits'))
 		move_to_middle_strength = config.getfloat('Dynamics', 'move_to_middle_strength')
+		alert_distance = config.getfloat('Dynamics', 'alert_distance')
 
 		
-		boids = Boids(count, position_limits, velocity_limits,move_to_middle_strength)
+		boids = Boids(count, position_limits, velocity_limits,
+                      move_to_middle_strength, alert_distance )
 		boids.deploySimulation()
 
 		
