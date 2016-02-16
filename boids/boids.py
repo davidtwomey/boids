@@ -6,27 +6,31 @@ for use as an exercise on refactoring.
 from matplotlib import pyplot as plt
 from matplotlib import animation
 import random
+import numpy as np
 
-# Deliberately terrible code for teaching purposes
-
+#------------------To be moved to fixtures file ------------
 boids_x=[random.uniform(-450,50.0) for x in range(50)]
 boids_y=[random.uniform(300.0,600.0) for x in range(50)]
 boid_x_velocities=[random.uniform(0,10.0) for x in range(50)]
 boid_y_velocities=[random.uniform(-20.0,20.0) for x in range(50)]
 boids=(boids_x,boids_y,boid_x_velocities,boid_y_velocities)
-
+#---------------------------------------------------------
 
 class Boids(object):
 	'''
 	Description: A class to model aggregate motion of a flock of simulated birds (boids)
 	'''
-	def __init__(self, positions, velocity, fields):
-		self.positions = positions
-		self.velocity = velocity
-		self.fields = fields
+	def __init__(self,boid_count, position_limits, velocity_limits, fields):
+		self.positions = self.new_flock(boid_count,
+            np.array(position_limits[0:2]),
+            np.array(position_limits[2:4]))
+		self.velocities = self.new_flock(boid_count,
+            np.array(velocity_limits[0:2]),
+            np.array(velocity_limits[2:4]))
+		#self.fields = fields
 		
 
-	def updateBoids(self, boids):
+	def update_boids(self, boids):
 		xs,ys,xvs,yvs=boids
 		# Fly towards the middle
 		for i in range(len(xs)):
@@ -55,15 +59,21 @@ class Boids(object):
 	def deploySimulation(self):
 		figure=plt.figure()
 		axes=plt.axes(xlim=(-500,1500), ylim=(-500,1500))
-		scatter=axes.scatter(boids[0],boids[1])
-		anim = animation.FuncAnimation(figure, animate,
+		self.scatter=axes.scatter(boids[0],boids[1])
+		anim = animation.FuncAnimation(figure, self.animate,
                                frames=50, interval=50)
+		plt.show()
 	def animate(self, frame):
-		update_boids(boids)
-		scatter.set_offsets(zip(boids[0],boids[1]))
+		self.update_boids(boids)
+		self.scatter.set_offsets(zip(boids[0],boids[1]))
 		
+	def new_flock(self, count,lower_limits, upper_limits):
+		width = upper_limits-lower_limits
+		return (lower_limits[:,np.newaxis] + np.random.rand(2,count)*width[:,np.newaxis])
 
-
+	
+		
+		
 
 if __name__ == "__main__":
 	obj_boid = Boids()

@@ -1,13 +1,29 @@
 from argparse import ArgumentParser
-from Boids import Boids
+from boids import Boids
+import json
+import ConfigParser
 
 def process():
 	''' 
 	Description: A function to communicate with the command line. This function is linked with the setup.py file.
 	'''
 	parser = ArgumentParser(description = "The Boids Flocking Bird Simulation")
-	parser.add_argument('','',help='',default='')
+	parser.add_argument('--config','-c',help='Config file',default='config.cfg')
 	args = parser.parse_args()
+	
+	config = ConfigParser.ConfigParser()
+	with open(args.config) as f:
+		config.readfp(f)
+		
+		count =config.getint('Boids','count')
+		position_limits =  json.loads(config.get('Boids', 'position_limits'))
+		velocity_limits =  json.loads(config.get('Boids', 'velocity_limits'))
+		
+		
+		boids = Boids(count, position_limits, velocity_limits,'')
+		boids.deploySimulation()
+
+		
 	
 if __name__ == "__main__":
 	process()
