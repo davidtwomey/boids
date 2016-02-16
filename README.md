@@ -1,0 +1,1 @@
+A deliberately bad implementation of Boids for use as an exercise on refactoring

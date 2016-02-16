@@ -1,0 +1,1 @@
+The Boids library is adapted from James Hetherington's implementation 'bad-boids' located <a href="https://github.com/jamespjh/bad-boids">here</a> as part of the Research Software Engineering with Python course under module code MPHYG001 at the University College London.
