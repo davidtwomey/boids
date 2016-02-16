@@ -1,0 +1,9 @@
+#Compiled python files (while testing these frequently appear)
+*.pyc
+
+#Misc and standard ignores
+*.DS_Store
+*.egg-info/
+*.egg
+build
+*~
