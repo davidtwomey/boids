@@ -14,21 +14,26 @@ def process():
 	config = ConfigParser.ConfigParser()
 	with open(args.config) as f:
 		config.readfp(f)
-		
+		# pull boids config data
 		count =config.getint('Boids','count')
 		position_limits =  json.loads(config.get('Boids', 'position_limits'))
 		velocity_limits =  json.loads(config.get('Boids', 'velocity_limits'))
+		# pull boid dynamics config data
 		move_to_middle_strength = config.getfloat('Dynamics', 'move_to_middle_strength')
 		alert_distance = config.getfloat('Dynamics', 'alert_distance')
 		formation_flying_distance = config.getfloat('Dynamics', 'formation_flying_distance')
 		formation_flying_strength = config.getfloat('Dynamics', 'formation_flying_strength')
-
+		#pull display config data (for animation)
+		xlim = json.loads(config.get('Display','xlim'))
+		ylim = json.loads(config.get('Display','ylim'))
+		
+		
 		boids = Boids(count, position_limits, velocity_limits,
                       move_to_middle_strength, 
                       alert_distance,
                       formation_flying_distance,
                       formation_flying_strength)
-		boids.deploySimulation()
+		boids.deploySimulation(xlim = tuple(xlim), ylim = tuple(ylim))
 
 		
 	
