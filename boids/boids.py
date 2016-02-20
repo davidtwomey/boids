@@ -23,7 +23,9 @@ class Boids(object):
 	def __init__(self, boid_count, position_limits, 
                                    velocity_limits,
                                    move_to_middle_strength,
-                                   alert_distance):
+                                   alert_distance,
+                                   formation_flying_distance,
+                                   formation_flying_strength):
 		self.positions = self.new_flock(boid_count,
             np.array(position_limits[0:2]),
             np.array(position_limits[2:4]))
@@ -32,11 +34,13 @@ class Boids(object):
             np.array(velocity_limits[2:4]))
 		self.move_to_middle_strength = move_to_middle_strength
 		self.alert_distance = alert_distance
+		self.formation_flying_distance = formation_flying_distance
+		self.formation_flying_strength = formation_flying_strength
+
 
 	def update_boids(self, positions, velocities):
 		#Calculation of boid separations and square distances
 		separations, square_distances = self.separations_square_distances(positions)
-		xs,ys,xvs,yvs=boids
 		# Fly towards the middle
 		self.fly_towards_middle(positions,velocities,
                                 move_to_middle_strength= self.move_to_middle_strength)
@@ -44,18 +48,16 @@ class Boids(object):
 		self.fly_away_from_nearby_boids(positions, velocities, separations, square_distances,
 			alert_distance = self.alert_distance)
 		# Try to match speed with nearby boids
-		for i in range(len(xs)):
-			for j in range(len(xs)):
-				if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < 10000:
-					xvs[i]=xvs[i]+(xvs[j]-xvs[i])*0.125/len(xs)
-					yvs[i]=yvs[i]+(yvs[j]-yvs[i])*0.125/len(xs)
+		self.match_speed_with_nearby_birds(positions, velocities, square_distances,
+                formation_flying_distance = self.formation_flying_distance, 
+                formation_flying_strength = self.formation_flying_strength)
 		# Move according to velocities
 		positions += velocities
 
 	def deploySimulation(self):
 		figure=plt.figure()
 		axes=plt.axes(xlim=(-500,1500), ylim=(-500,1500))
-		self.scatter=axes.scatter(boids[0],boids[1])
+		self.scatter=axes.scatter(self.positions[0,:],self.positions[1,:])
 		anim = animation.FuncAnimation(figure, self.animate,
                                frames=50, interval=50)
 		plt.show()
@@ -86,6 +88,15 @@ class Boids(object):
 		separations_if_close[0,:,:][far_away] = 0
 		separations_if_close[1,:,:][far_away] = 0
 		velocities += np.sum(separations_if_close, 1)
+
+	def match_speed_with_nearby_birds(self, positions, velocities, square_distances,
+                                      formation_flying_distance = 10000, formation_flying_strength = 0.125):
+		very_far = square_distances > formation_flying_distance
+		velocity_differences = velocities[:,np.newaxis,:] - velocities[:,:,np.newaxis]
+		velocity_differences_if_close = np.copy(velocity_differences)
+		velocity_differences_if_close[0,:,:][very_far] = 0
+		velocity_differences_if_close[1,:,:][very_far] = 0
+		velocities -= np.mean(velocity_differences_if_close, 1) * formation_flying_strength
 
 if __name__ == "__main__":
 	obj_boid = Boids()
