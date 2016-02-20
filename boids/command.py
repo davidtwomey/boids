@@ -24,8 +24,10 @@ def process():
 		formation_flying_distance = config.getfloat('Dynamics', 'formation_flying_distance')
 		formation_flying_strength = config.getfloat('Dynamics', 'formation_flying_strength')
 		#pull display config data (for animation)
-		xlim = json.loads(config.get('Display','xlim'))
-		ylim = json.loads(config.get('Display','ylim'))
+		xlim = tuple(json.loads(config.get('Display','xlim')))
+		ylim = tuple(json.loads(config.get('Display','ylim')))
+		frames = config.getint('Display','frames')     #check if should be float!
+		interval = config.getint('Display','interval') #check if can be float!
 		
 		
 		boids = Boids(count, position_limits, velocity_limits,
@@ -33,7 +35,7 @@ def process():
                       alert_distance,
                       formation_flying_distance,
                       formation_flying_strength)
-		boids.deploySimulation(xlim = tuple(xlim), ylim = tuple(ylim))
+		boids.deploySimulation(xlim, ylim,frames,interval)
 
 		
 	

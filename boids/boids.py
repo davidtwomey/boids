@@ -54,12 +54,12 @@ class Boids(object):
 		# Move according to velocities
 		positions += velocities
 
-	def deploySimulation(self, xlim, ylim):
+	def deploySimulation(self, xlim, ylim, frames, interval):
 		figure=plt.figure()
 		axes=plt.axes(xlim=xlim, ylim=ylim)
 		self.scatter=axes.scatter(self.positions[0,:],self.positions[1,:])
 		anim = animation.FuncAnimation(figure, self.animate,
-                               frames=50, interval=50)
+                               frames=frames, interval=interval)
 		plt.show()
 	def animate(self, frame):
 		self.update_boids(self.positions,self.velocities)
