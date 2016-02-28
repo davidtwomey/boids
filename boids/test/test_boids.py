@@ -14,11 +14,7 @@ def test_update_boids():
 	fixtures = yaml.load(open(fixtures_file))
 	for fixture in fixtures:
 		print fixture
-		before = fixture.pop('before')
-		after = fixture.pop('after')
-		boids = Boids()
-		boids.positions = np.array(before[0:2])
-		boids.velocities = np.array(before[2:4])
+		boids,after = setup_fixtures(fixture)
 		boids.update_boids(boids.positions,boids.velocities)
 		assert_almost_equal(boids.positions.all(), np.array(after[0:2]).all())
 		assert_almost_equal(boids.velocities.all(), np.array(after[2:4]).all())
@@ -50,11 +46,7 @@ def test_separations_square_distance():
 def test_fly_towards_middle():
 	fixtures = yaml.load(open(fixtures_file))
 	for fixture in fixtures:
-		before = fixture.pop('before')
-		after = fixture.pop('after')
-		boids = Boids()
-		boids.positions = np.array(before[0:2])
-		boids.velocities = np.array(before[2:4])
+		boids,after = setup_fixtures(fixture)
 		boids.fly_towards_middle(boids.positions,boids.velocities)
 		assert_almost_equal(boids.positions.all(),np.array(after[0:2]).all())
 		assert_almost_equal(boids.velocities.all(),np.array(after[2:4]).all())
@@ -62,11 +54,7 @@ def test_fly_towards_middle():
 def test_fly_away_from_nearby_boids():
 	fixtures = yaml.load(open(fixtures_file))
 	for fixture in fixtures:
-		before = fixture.pop('before')
-		after = fixture.pop('after')
-		boids = Boids()
-		boids.positions = np.array(before[0:2])
-		boids.velocities = np.array(before[2:4])
+		boids,after = setup_fixtures(fixture)
 		separations, square_distances = boids.separations_square_distances(boids.positions)
 		boids.fly_away_from_nearby_boids(boids.positions,boids.velocities,separations,square_distances)
 		assert_almost_equal(boids.positions.all(),np.array(after[0:2]).all())
@@ -75,12 +63,17 @@ def test_fly_away_from_nearby_boids():
 def test_match_speed_with_nearby_boids():
 	fixtures = yaml.load(open(fixtures_file))
 	for fixture in fixtures:
-		before = fixture.pop('before')
-		after = fixture.pop('after')
-		boids = Boids()
-		boids.positions = np.array(before[0:2])
-		boids.velocities = np.array(before[2:4])
+		boids,after = setup_fixtures(fixture)
 		separations, square_distances = boids.separations_square_distances(boids.positions)
 		boids.match_speed_with_nearby_boids(boids.positions,boids.velocities,square_distances)
 		assert_almost_equal(boids.positions.all(),np.array(after[0:2]).all())
 		assert_almost_equal(boids.positions.all(),np.array(after[2:4]).all())
+		
+# Sets up fixtures from YAML file for unit tests
+def setup_fixtures(fixture):
+	before = fixture.pop('before')
+	after = fixture.pop('after')
+	boids = Boids()
+	boids.positions = np.array(before[0:2])
+	boids.velocities = np.array(before[2:4])
+	return boids,after
