@@ -9,7 +9,9 @@ from mock import Mock, patch
 fixtures_file = os.path.join(os.path.dirname(__file__),'fixtures','fixture.yaml')
 fixtures = yaml.load(open(fixtures_file))
 
+
 def test_update_boids():
+	fixtures = yaml.load(open(fixtures_file))
 	for fixture in fixtures:
 		print fixture
 		before = fixture.pop('before')
@@ -22,6 +24,7 @@ def test_update_boids():
 		assert_almost_equal(boids.velocities.all(), np.array(after[2:4]).all())
 		
 def test_new_flock():
+	fixtures = yaml.load(open(fixtures_file))
 	for fixture in fixtures:
 		new_flock = fixture.pop('new_flock')
 		rand = new_flock['rand']
@@ -33,6 +36,7 @@ def test_new_flock():
 			assert_equal(np.array(velocities).all(),boids.velocities.all())
 
 def test_separations_square_distance():
+	fixtures = yaml.load(open(fixtures_file))
 	for fixture in fixtures:
 		fix_separations = fixture.pop('separations_square_distances')
 		positions = fix_separations['positions']
@@ -42,4 +46,17 @@ def test_separations_square_distance():
 		boids.positions = np.array(positions)
 		separations, square_distances = boids.separations_square_distances(boids.positions)
 		assert_almost_equal(separations.all(),np.array(fix_separations).all())
+
+def test_fly_towards_middle():
+	fixtures = yaml.load(open(fixtures_file))
+	for fixture in fixtures:
+		print fixture
+		before = fixture.pop('before')
+		after = fixture.pop('after')
+		boids = Boids()
+		boids.positions = np.array(before[0:2])
+		boids.velocities = np.array(before[2:4])
+		boids.fly_towards_middle(boids.positions,boids.velocities)
+		assert_almost_equal(boids.positions.all(),np.array(after[0:2]).all())
+		assert_almost_equal(boids.velocities.all(),np.array(after[2:4]).all())
 		

@@ -77,7 +77,7 @@ class Boids(object):
 		return separations, square_distances
 
 	def fly_towards_middle(self, positions, velocities,
-                                 move_to_middle_strength):
+                                 move_to_middle_strength=0.01):
 		middle = np.mean(positions, 1)
 		direction_to_middle = positions - middle[:, np.newaxis]
 		velocities -= direction_to_middle * move_to_middle_strength
