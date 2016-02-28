@@ -5,6 +5,7 @@ import os
 import yaml
 import numpy as np
 from mock import Mock, patch
+
 fixtures_file = os.path.join(os.path.dirname(__file__),'fixtures','fixture.yaml')
 fixtures = yaml.load(open(fixtures_file))
 
@@ -30,3 +31,15 @@ def test_new_flock():
 			boids = Boids()
 			assert_equal(np.array(positions).all(),boids.positions.all())
 			assert_equal(np.array(velocities).all(),boids.velocities.all())
+
+def test_separations_square_distance():
+	for fixture in fixtures:
+		fix_separations = fixture.pop('separations_square_distances')
+		positions = fix_separations['positions']
+		sq_distances = fix_separations['sq_distances']
+		fix_separations = fix_separations['separations']
+		boids = Boids()
+		boids.positions = np.array(positions)
+		separations, square_distances = boids.separations_square_distances(boids.positions)
+		assert_almost_equal(separations.all(),np.array(fix_separations).all())
+		
