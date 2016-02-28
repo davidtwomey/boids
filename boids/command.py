@@ -35,7 +35,7 @@ def process():
                       alert_distance,
                       formation_flying_distance,
                       formation_flying_strength)
-		boids.deploySimulation(xlim, ylim,frames,interval)
+		boids.deploy_simulation(xlim, ylim,frames,interval)
 
 		
 	

@@ -54,7 +54,7 @@ class Boids(object):
 		# Move according to velocities
 		positions += velocities
 
-	def deploySimulation(self, xlim, ylim, frames, interval):
+	def deploy_simulation(self, xlim, ylim, frames, interval):
 		figure=plt.figure()
 		axes=plt.axes(xlim=xlim, ylim=ylim)
 		self.scatter=axes.scatter(self.positions[0,:],self.positions[1,:])
@@ -98,3 +98,7 @@ class Boids(object):
 		velocity_differences_if_close[1,:,:][very_far] = 0
 		velocities -= np.mean(velocity_differences_if_close, 1) * formation_flying_strength
 
+
+if __name__ == "__main__": 
+	boid_object = Boids()
+	boid_object.deploy_simulation()
