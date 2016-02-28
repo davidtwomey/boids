@@ -71,3 +71,16 @@ def test_fly_away_from_nearby_boids():
 		boids.fly_away_from_nearby_boids(boids.positions,boids.velocities,separations,square_distances)
 		assert_almost_equal(boids.positions.all(),np.array(after[0:2]).all())
 		assert_almost_equal(boids.velocities.all(),np.array(after[2:4]).all())
+
+def test_match_speed_with_nearby_boids():
+	fixtures = yaml.load(open(fixtures_file))
+	for fixture in fixtures:
+		before = fixture.pop('before')
+		after = fixture.pop('after')
+		boids = Boids()
+		boids.positions = np.array(before[0:2])
+		boids.velocities = np.array(before[2:4])
+		separations, square_distances = boids.separations_square_distances(boids.positions)
+		boids.match_speed_with_nearby_boids(boids.positions,boids.velocities,square_distances)
+		assert_almost_equal(boids.positions.all(),np.array(after[0:2]).all())
+		assert_almost_equal(boids.positions.all(),np.array(after[2:4]).all())
