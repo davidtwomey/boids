@@ -50,7 +50,6 @@ def test_separations_square_distance():
 def test_fly_towards_middle():
 	fixtures = yaml.load(open(fixtures_file))
 	for fixture in fixtures:
-		print fixture
 		before = fixture.pop('before')
 		after = fixture.pop('after')
 		boids = Boids()
@@ -60,3 +59,15 @@ def test_fly_towards_middle():
 		assert_almost_equal(boids.positions.all(),np.array(after[0:2]).all())
 		assert_almost_equal(boids.velocities.all(),np.array(after[2:4]).all())
 		
+def test_fly_away_from_nearby_boids():
+	fixtures = yaml.load(open(fixtures_file))
+	for fixture in fixtures:
+		before = fixture.pop('before')
+		after = fixture.pop('after')
+		boids = Boids()
+		boids.positions = np.array(before[0:2])
+		boids.velocities = np.array(before[2:4])
+		separations, square_distances = boids.separations_square_distances(boids.positions)
+		boids.fly_away_from_nearby_boids(boids.positions,boids.velocities,separations,square_distances)
+		assert_almost_equal(boids.positions.all(),np.array(after[0:2]).all())
+		assert_almost_equal(boids.velocities.all(),np.array(after[2:4]).all())

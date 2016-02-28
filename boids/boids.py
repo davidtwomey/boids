@@ -49,7 +49,7 @@ class Boids(object):
 		self.fly_away_from_nearby_boids(positions, velocities, separations, square_distances,
 			alert_distance = self.alert_distance)
 		# Try to match speed with nearby boids
-		self.match_speed_with_nearby_birds(positions, velocities, square_distances,
+		self.match_speed_with_nearby_boids(positions, velocities, square_distances,
                 formation_flying_distance = self.formation_flying_distance, 
                 formation_flying_strength = self.formation_flying_strength)
 		# Move according to velocities
@@ -90,7 +90,7 @@ class Boids(object):
 		separations_if_close[1,:,:][far_away] = 0
 		velocities += np.sum(separations_if_close, 1)
 
-	def match_speed_with_nearby_birds(self, positions, velocities, square_distances,
+	def match_speed_with_nearby_boids(self, positions, velocities, square_distances,
                                       formation_flying_distance = 10000, formation_flying_strength = 0.125):
 		very_far = square_distances > formation_flying_distance
 		velocity_differences = velocities[:,np.newaxis,:] - velocities[:,:,np.newaxis]
