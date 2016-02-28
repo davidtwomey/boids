@@ -20,12 +20,13 @@ class Boids(object):
 	'''
 	Description: A class to model aggregate motion of a flock of simulated birds (boids)
 	'''
-	def __init__(self, boid_count, position_limits, 
-                                   velocity_limits,
-                                   move_to_middle_strength,
-                                   alert_distance,
-                                   formation_flying_distance,
-                                   formation_flying_strength):
+	def __init__(self, boid_count=50, 
+                       position_limits=[-450.0,300.0,50.0,600.0], 
+                       velocity_limits=[0.0,-20.0,10.0,20.0],
+                       move_to_middle_strength=0.01,
+                       alert_distance=100,
+                       formation_flying_distance=10000,
+                       formation_flying_strength=0.125 ):
 		self.positions = self.new_flock(boid_count,
             np.array(position_limits[0:2]),
             np.array(position_limits[2:4]))
@@ -100,5 +101,5 @@ class Boids(object):
 
 
 if __name__ == "__main__": 
-	boid_object = Boids()
-	boid_object.deploy_simulation()
+	boid = Boids()
+	boid.deploy_simulation()
