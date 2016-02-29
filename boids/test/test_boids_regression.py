@@ -14,4 +14,4 @@ def test_bad_boids_regression():
 	boids.update_boids(boids.positions, boids.velocities)
 	for after,before in zip(regression_data["after"],boid_data):
 		for after_value,before_value in zip(after,before): 
-			assert_almost_equal(after_value,before_value,delta=0.1)
+			assert_almost_equal(after_value,before_value,delta=0.02)

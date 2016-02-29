@@ -1,20 +1,7 @@
-"""
-A deliberately bad implementation of [Boids](http://dl.acm.org/citation.cfm?doid=37401.37406)
-for use as an exercise on refactoring.
-"""
-
 from matplotlib import pyplot as plt
 from matplotlib import animation
 import random
 import numpy as np
-
-#------------------To be moved to fixtures file ------------
-#boids_x=[random.uniform(-450,50.0) for x in range(50)]
-#boids_y=[random.uniform(300.0,600.0) for x in range(50)]
-#boid_x_velocities=[random.uniform(0,10.0) for x in range(50)]
-#boid_y_velocities=[random.uniform(-20.0,20.0) for x in range(50)]
-#boids=(boids_x,boids_y,boid_x_velocities,boid_y_velocities)
-#---------------------------------------------------------
 
 class Boids(object):
 	'''
@@ -40,15 +27,11 @@ class Boids(object):
 
 
 	def update_boids(self, positions, velocities):
-		#Calculation of boid separations and square distances
 		separations, square_distances = self.separations_square_distances(positions)
-		# Fly towards the middle
 		self.fly_towards_middle(positions,velocities,
                                 move_to_middle_strength= self.move_to_middle_strength)
-		# Fly away from nearby boids
 		self.fly_away_from_nearby_boids(positions, velocities, separations, square_distances,
 			alert_distance = self.alert_distance)
-		# Try to match speed with nearby boids
 		self.match_speed_with_nearby_boids(positions, velocities, square_distances,
                 formation_flying_distance = self.formation_flying_distance, 
                 formation_flying_strength = self.formation_flying_strength)
@@ -99,7 +82,7 @@ class Boids(object):
 		velocity_differences_if_close[1,:,:][very_far] = 0
 		velocities -= np.mean(velocity_differences_if_close, 1) * formation_flying_strength
 
-
+# For testing
 if __name__ == "__main__": 
 	boid = Boids()
 	boid.deploy_simulation()

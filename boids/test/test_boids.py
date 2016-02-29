@@ -1,4 +1,3 @@
-import sys
 from boids.boids import Boids
 from nose.tools import assert_almost_equal, assert_equal
 import os
@@ -6,9 +5,9 @@ import yaml
 import numpy as np
 from mock import Mock, patch
 
+#Load fixtures file
 fixtures_file = os.path.join(os.path.dirname(__file__),'fixtures','fixture.yaml')
 fixtures = yaml.load(open(fixtures_file))
-
 
 def test_update_boids():
 	fixtures = yaml.load(open(fixtures_file))
@@ -50,7 +49,7 @@ def test_fly_towards_middle():
 		boids.fly_towards_middle(boids.positions,boids.velocities)
 		assert_almost_equal(boids.positions.all(),np.array(after[0:2]).all())
 		assert_almost_equal(boids.velocities.all(),np.array(after[2:4]).all())
-		
+
 def test_fly_away_from_nearby_boids():
 	fixtures = yaml.load(open(fixtures_file))
 	for fixture in fixtures:
@@ -68,7 +67,7 @@ def test_match_speed_with_nearby_boids():
 		boids.match_speed_with_nearby_boids(boids.positions,boids.velocities,square_distances)
 		assert_almost_equal(boids.positions.all(),np.array(after[0:2]).all())
 		assert_almost_equal(boids.positions.all(),np.array(after[2:4]).all())
-		
+
 # Sets up fixtures from YAML file for unit tests
 def setup_fixtures(fixture):
 	before = fixture.pop('before')
